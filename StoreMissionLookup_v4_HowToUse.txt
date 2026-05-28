@@ -1,0 +1,303 @@
+============================================================
+  STORE MISSION LOOKUP v4.0 — HOW TO USE
+============================================================
+
+
+WHAT'S NEW IN v4
+-----------------
+  - Excel file support (.xlsx and .xls)
+  - File type validation — unsupported formats are rejected
+  - Missing data validation — import is blocked if any row
+    has a blank Store Details, Mission Name, or Mission Link
+  - Fuzzy / approximate search (typo-tolerant)
+  - Resizable columns in Activity History
+  - Dark mode only (permanent)
+  - VACUUM on delete — database file shrinks after deletions
+  - Import DB file — merge or replace from another database
+  - Window opens centred at 720px height
+
+
+------------------------------------------------------------
+  RUNNING THE APP
+------------------------------------------------------------
+
+Option A — Double-click the .exe (recommended):
+  1. Place StoreMissionLookup_v4.exe anywhere on your computer.
+  2. Double-click it to open.
+  3. If Windows shows a SmartScreen warning:
+     Click "More info" then "Run anyway". One time only.
+
+Option B — Run with Python:
+  1. Open Command Prompt (Win+R → cmd → Enter)
+  2. First time only:
+       pip install customtkinter openpyxl
+  3. Navigate to the folder:
+       cd C:\Users\YourName\Desktop\StoreMissionApp
+  4. Run:
+       python app_v4.py
+
+
+------------------------------------------------------------
+  FIRST-TIME SETUP
+------------------------------------------------------------
+
+1. Open the app.
+2. Click  ⚙ Settings  (or press Ctrl+S).
+3. Enter your name — logged in Activity History.
+4. Set the database path:
+     Local:  leave default — no change needed.
+     Shared: paste the shared path, e.g.
+       C:\Users\YourName\OneDrive\StoreMissionLookup\data.db
+5. Click "Test Connection" → should show ✓ Connection successful.
+6. Set Auto-refresh if using a shared database (10–45 min).
+7. Click Save.
+
+Status bar at the bottom shows:
+   💾 Local   — your own database
+   🔗 Shared  — connected to shared team database
+
+
+------------------------------------------------------------
+  PREPARING YOUR CSV OR EXCEL FILE
+------------------------------------------------------------
+
+Supported formats:
+   .csv   .txt   .xlsx   .xls
+
+Your file MUST have exactly these 3 columns.
+Every row must have all 3 columns filled in — blank cells
+will block the import entirely.
+
+  Column 1:  Store Details
+             Full store name and address.
+             Example:  Hannaford #8327 - 777 Rogers St, Lowell, MA
+
+  Column 2:  Mission Name
+             The name of the survey or mission.
+             Example:  Show me the honey
+
+  Column 3:  Mission Link
+             Direct URL to the mission.
+             Example:  https://admin.snooper.app/#/campaigns/2elmBuT5FG/show
+
+One row per store-mission pair.
+If a store is in 3 missions, it appears on 3 separate rows.
+Duplicate rows are skipped automatically.
+
+
+------------------------------------------------------------
+  IMPORTING DATA  (Ctrl + I)
+------------------------------------------------------------
+
+1. Click  ⬆ Import  in the toolbar, or press Ctrl+I.
+2. Select your CSV or Excel file.
+3. The app checks your file:
+     a) File type check — unsupported formats are rejected
+        immediately with an error.
+     b) Column detection — auto-detects Store Details,
+        Mission Name, and Mission Link columns.
+        If it can't detect them, use the manual dropdowns.
+     c) Missing data check — every row is scanned before
+        anything is written. If any cell is blank in a
+        required column, the import is blocked and you see
+        exactly which rows have missing data (Row 5: Mission
+        Link is blank, etc.). Fix the file and re-import.
+4. If all checks pass, a progress bar shows rows being added.
+5. When done, the store list refreshes automatically.
+
+NOTE: Import history is logged. View it via  📋 History.
+
+
+------------------------------------------------------------
+  SEARCHING AND FILTERING
+------------------------------------------------------------
+
+Standard search:
+  - Type any part of the store name or address.
+  - Results update instantly as you type.
+  - Use the All missions dropdown to filter by mission.
+
+Fuzzy search:
+  - Tick the  Fuzzy  checkbox next to the search box.
+  - Finds approximate matches even with typos.
+    Example: "hannford" finds "Hannaford #8327".
+  - The result count shows "(fuzzy)" when active.
+
+Refresh  (Ctrl + R):
+  - Reloads data from the database.
+  - Clears the search box, mission filter, and selection.
+  - Moves cursor to search box ready for a new search.
+
+
+------------------------------------------------------------
+  VIEWING MISSIONS
+------------------------------------------------------------
+
+  1. Click any store in the left panel.
+  2. The right panel shows all missions for that store.
+  3. Each mission card shows:
+       - Mission name
+       - Mission link (click to open in browser)
+       - Open button — opens the link in your browser
+       - Copy button — copies the link to clipboard
+
+
+------------------------------------------------------------
+  DELETING STORES
+------------------------------------------------------------
+
+Method A — Delete one store:
+  1. Click the store to select it.
+  2. Click  🗑 Delete Store  (top right of right panel).
+  3. Confirm.
+
+Method B — Delete multiple stores:
+  - Ctrl+Click to select individual stores.
+  - Shift+Click to select a range.
+  - Click  Delete Selected  and confirm.
+  - The button shows the count: "Delete Selected (14)".
+
+Method C — Bulk clear all stores in a mission:
+  1. Select the mission from the dropdown.
+  2. Click  Select All  to select every visible store.
+  3. Click  Delete Selected  and confirm.
+
+After any delete — UNDO (30 seconds):
+  - A green bar appears with a countdown timer.
+  - Click  ↩ Undo  before 30 seconds to restore everything.
+  - After 30 seconds the delete is permanent.
+
+Note: Deleting a store removes it from ALL missions,
+      not just the one currently filtered.
+
+Database shrinking:
+  - After every delete, the app automatically runs VACUUM
+    on the database so the .db file shrinks on disk.
+
+
+------------------------------------------------------------
+  ACTIVITY HISTORY  (Ctrl + H)
+------------------------------------------------------------
+
+  - All imports, deletes, and undos are logged here.
+  - Click any column header to sort by that column.
+    Click again to reverse (▲ / ▼ indicator).
+  - Drag column borders to resize them.
+  - Horizontal scrollbar for wide content.
+  - Press Esc to close.
+
+Columns:
+  Date & Time   When the action was performed
+  Action        ⬆ Import  🗑 Delete  ↩ Undo
+  Detail        File name or store name(s)
+  Performed By  Name from Settings
+  Rows          Rows added or removed
+  Notes         Duplicates skipped / stores removed
+
+
+------------------------------------------------------------
+  IMPORT DB FILE  (Settings → Import DB file)
+------------------------------------------------------------
+
+Use this to bring in data from another machine's database.
+
+  1. Open  ⚙ Settings.
+  2. Click  📥 Import DB file.
+  3. Select the .db file.
+  4. Choose:
+       YES    = Merge — adds rows, skips duplicates (safe)
+       NO     = Replace — overwrites all existing data
+       CANCEL = Do nothing
+
+Use Merge when combining two team members' databases.
+Use Replace when restoring from a backup.
+
+
+------------------------------------------------------------
+  SHARED DATABASE SETUP  (TEAM USE)
+------------------------------------------------------------
+
+Step 1 — Admin creates a shared folder:
+  OneDrive:    C:\Users\YourName\OneDrive\StoreMissionLookup\
+  SharePoint:  C:\Users\YourName\CompanyName\StoreMissionLookup\
+  Google Drive: G:\My Drive\StoreMissionLookup\
+
+Step 2 — Each team member sets their path in Settings:
+  C:\Users\[TheirName]\OneDrive\StoreMissionLookup\data.db
+
+Step 3 — Click  ↻ Refresh  to load the shared data.
+
+Team rules:
+  ✔  Only one person imports or deletes at a time.
+  ✔  Everyone else clicks ↻ Refresh after changes.
+  ✔  Watch for 🔔 notifications when teammates make changes.
+  ✔  🔒 lock notice appears when someone is importing.
+  ✔  🟢 Online bar shows who has the app open.
+  ✔  Set auto-refresh in Settings (10–45 min).
+
+
+------------------------------------------------------------
+  KEYBOARD SHORTCUTS
+------------------------------------------------------------
+
+  Navigation & Search
+    Ctrl + F       Focus the search box
+    Ctrl + R       Refresh (clears search, filter, selection)
+    Escape         Clear search  /  close popup window
+
+  Data Actions
+    Ctrl + I       Open Import dialog (CSV or Excel)
+    Ctrl + E       Export filtered data to CSV
+    Delete         Delete selected stores
+    Ctrl + Z       Undo last delete (30-second window)
+
+  Windows
+    Ctrl + H       Open Activity History
+    Ctrl + S       Open Settings
+    Ctrl + `       Cycle between open popup windows
+    F1 / Ctrl+/    Open Keyboard Shortcuts window
+    Escape         Close any popup window
+
+  Mouse — Store List
+    Click          Select store and view missions
+    Ctrl + Click   Add / remove individual stores
+    Shift + Click  Select a range of stores
+
+  Search
+    Fuzzy checkbox Toggle fuzzy / approximate matching
+
+
+------------------------------------------------------------
+  DATA STORAGE
+------------------------------------------------------------
+
+  Default path:
+    %APPDATA%\StoreMissionLookup\data.db
+
+  Settings file:
+    %APPDATA%\StoreMissionLookup\settings.json
+
+  Your data stays permanently until you delete it.
+  Moving or deleting the .exe does NOT affect your data.
+
+  Backup: copy the StoreMissionLookup folder from AppData
+  to an external drive or cloud location.
+
+  Reset bad settings (if app crashes on startup):
+    del "%APPDATA%\StoreMissionLookup\settings.json"
+
+
+------------------------------------------------------------
+  BUILDING THE .EXE  (ONE TIME ONLY)
+------------------------------------------------------------
+
+1. Place  app_v4.py  and  build_v4.bat  in the same folder.
+2. Double-click  build_v4.bat.
+3. Wait 1–3 minutes. Do not close the window.
+4. When you see SUCCESS, your .exe is at:
+     dist\StoreMissionLookup_v4.exe
+5. Move the .exe anywhere. It works from any location.
+
+============================================================
+     Store Mission Lookup v4.0  —  How to Use Guide
+============================================================
